@@ -1,7 +1,8 @@
 from collections import defaultdict
 import os
 
-def main():
+# programa de busqueda de cliente fiel por socio
+def Cliente_fiel():
     #ruta actual 
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -17,27 +18,32 @@ def main():
         # se redefine input para leer linea a linea del archivo
         input = archivo.readline
 
-        
         # VALIDAR PRIMERA LINEA
-        # lectura del archivo y limpia de la cadena(elimina espacios y cadenas de terminacion final)
+        # lectura de la primera linea del archivo y limpia de la
+        # cadena(elimina espacios y cadenas de terminacion final)
         linea = input().strip()
 
         #si la linea esta vacia, se detiene el programa
         if not linea:
-            raise ValueError("Error: la primera línea está vacía")
+            raise ValueError("Error: la primera linea esta vacia")
 
+        # convierte una cadena en una lista separados por espacios  "1 2 3" -> ["1" "2" "3"]
         partes = linea.split()
 
-        # Deben ser exactamente 3 valores
+        # deben ser exactamente 3 valores
         if len(partes) != 3:
-            raise ValueError("Error: la primera línea debe contener exactamente 3 enteros")
-
+            raise ValueError("Error: la primera linea debe contener exactamente 3 enteros")
+  
+        # N - numero de socios
+        # M - numero de terminales
+        # S - numero de transacciones
         try:
+            # ["1" "2" "3"] -> [1 2 3]
             N, M, S = map(int, partes)
         except:
             raise ValueError("Error: los valores deben ser enteros")
 
-        # Validación de rango
+        # validacion de rango de N, M y S
         if not (1 <= N <= 1000):
             raise ValueError(f"Error: N fuera de rango (N={N})")
 
@@ -47,24 +53,15 @@ def main():
         if not (1 <= S <= 1000):
             raise ValueError(f"Error: S fuera de rango (S={S})")
 
-
-
-        # lectura de parametros iniciales, en la primera linea del archivo
-        # N - numero de socios
-        # M - numero de terminales
-        # S - numero de transacciones
-        N, M, S = map(int, input().split())
-
-        # mapeo terminal por socio, se usara diccionario
+        # mapeo terminal por socio, se usara diccionario { t:p }
         # clave: terminal(t)
         # valor: socio(p)
         terminal_to_socio = {}
-
-        # Leer las M líneas de terminales
+        # lee las M lineas de terminales
         for _ in range(M):
             p, t = map(int, input().split())
 
-            # Guardamos la relación
+            # se guarda la relacion
             terminal_to_socio[t] = p
 
 
@@ -127,4 +124,4 @@ def main():
 
 #consumo de la funcion main
 if __name__ == "__main__":
-    main()
+    Cliente_fiel()
