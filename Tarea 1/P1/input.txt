@@ -1,0 +1,9 @@
+3
+/ HomePage
+/profile ProfilePage
+/user/:id UserPage {id}
+4
+/
+/profile
+/user/42
+/settings

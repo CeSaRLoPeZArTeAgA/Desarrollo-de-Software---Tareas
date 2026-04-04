@@ -1,0 +1,4 @@
+HomePage
+ProfilePage
+UserPage 42
+404 Not Found
