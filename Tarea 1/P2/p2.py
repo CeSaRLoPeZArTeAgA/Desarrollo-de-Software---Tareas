@@ -67,12 +67,10 @@ def Cliente_fiel():
 
         # definicion de la estructura de conteo
         # conteo[p][c] = número de compras del cliente c en el socio p
-        #
         # defaultdict(int) inicializa automáticamente en 0
         conteo = {i: defaultdict(int) for i in range(1, N + 1)}
    
-        #procesamiento de transacciones
-        # se lee S transacciones (el S ya esta validado en la primera linea)
+        #procesamiento de transacciones,se lee S transacciones 
         for _ in range(S):
             c, t = map(int, input().split())
 
