@@ -1,17 +1,7 @@
 import os  # modulo para manejo de rutas del sistema operativo
 
+#convierte una ruta tipo string en una lista de segmentos
 def dividir_ruta(ruta):
-    """
-    convierte una ruta tipo string en una lista de segmentos.
-
-    ejemplo:
-        "/user/:id" -> ["user", ":id"]
-        "/profile"  -> ["profile"]
-        "/"         -> []
-
-    se eliminan las barras inicial y final con strip("/")
-    """
-
     # caso especial: ruta raiz "/"
     if ruta == "/":
         return []
@@ -20,22 +10,9 @@ def dividir_ruta(ruta):
     return ruta.strip("/").split("/")
 
 
+#determina si una transicion coincide con una ruta definida.
 def coincide_ruta(ruta_definida, transicion):
-    """
-    determina si una transicion coincide con una ruta definida.
-
-    parametros:
-        ruta_definida : ruta registrada (ej: "/user/:id")
-        transicion    : ruta ingresada (ej: "/user/42")
-
-    retorna:
-        - none si NO coincide
-        - lista de parametros si coincide
-
-    ejemplo:
-        "/user/:id" con "/user/42" -> ["42"]
-    """
-
+    
     # dividir ambas rutas en segmentos
     partes_ruta = dividir_ruta(ruta_definida)
     partes_transicion = dividir_ruta(transicion)
@@ -62,16 +39,9 @@ def coincide_ruta(ruta_definida, transicion):
     return parametros
 
 
-# PROGRAMA PRINCIPAL
+# procesa rutas y transiciones
 def resolver_enrutamiento():
-    """
-    funcion principal que:
-    - lee el archivo input.txt
-    - procesa rutas y transiciones
-    - guarda resultados en output.txt
-    - imprime resultados en terminal
-    """
-
+    
     # obtiene la ruta absoluta del archivo actual
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -95,7 +65,7 @@ def resolver_enrutamiento():
         # cada elemento es (ruta, contenido)
         rutas = []
 
-        # leer las N rutas
+        # leer las "N" rutas
         for _ in range(N):
             linea = input().strip()
 
@@ -104,7 +74,7 @@ def resolver_enrutamiento():
 
             rutas.append((ruta, contenido))
 
-        # leer numero de transiciones
+        # leer numero de transiciones "M"
         M = int(input().strip())
 
         # procesamiento
@@ -118,10 +88,8 @@ def resolver_enrutamiento():
 
             # recorrer todas las rutas registradas
             for ruta, contenido in rutas:
-
                 # verificar si coincide
                 parametros = coincide_ruta(ruta, transicion)
-
                 # si coincide la ruta
                 if parametros is not None:
 
@@ -158,6 +126,6 @@ def resolver_enrutamiento():
     for linea in resultados:
         print(linea)
 
-# ejecucion del programa principal
+#ejecucion del programa principal que consume "resolver_enrutamiento"
 if __name__ == "__main__":
     resolver_enrutamiento()
