@@ -16,14 +16,14 @@ Incluye:
 - Historial de estados de cada incidencia.
 - Documentación de arquitectura, casos de uso, API, GitFlow y casos de prueba.
 
-
+--- 
 ## 1. Requisitos
 
 Instalar:
 
 - Node.js 20 o superior.
 - npm.
-
+---
 ## 2. Instalación
 
 Crear archivo de configuración:
@@ -37,7 +37,7 @@ En Windows PowerShell:
 ```powershell
 Copy-Item .env.example .env
 ```
-
+---
 ## 3. Ejecutar el sistema
 
 Modo normal:
@@ -57,14 +57,14 @@ Luego abrir en el navegador:
 ```text
 http://localhost:3000
 ```
-
+---
 
 ## 4. Ejecutar pruebas
 
 ```bash
 npm test
 ```
-
+---
 ## 5. Casos de uso implementados
 
 ### Caso de uso 1: Reportar falla de alumbrado público
@@ -100,7 +100,7 @@ EMERGENCIA
 
 ---
 
-## 7. API principal
+## 6. API principal
 
 Crear incidencia con JSON:
 
@@ -149,9 +149,9 @@ curl -X PATCH http://localhost:3000/api/incidentes/1/estado \
   }'
 ```
 
+---
 
-
-## 9. Flujo GitFlow 
+## 7. Flujo GitFlow 
 
 ```text
 main       -> versión estable

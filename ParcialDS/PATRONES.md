@@ -19,13 +19,11 @@ Ventaja:
 ## 2. Repository Pattern
 
 Archivo:
-
 ```text
 src/models/incidentRepository.js
 ```
 
 El repositorio encapsula las operaciones de base de datos:
-
 - Crear incidencia.
 - Listar incidencias.
 - Buscar por ID.
@@ -35,7 +33,6 @@ El repositorio encapsula las operaciones de base de datos:
 Esto evita que las rutas tengan consultas SQL directamente.
 
 ---
-
 ## 3. Service Layer Pattern
 
 Archivo:
@@ -52,7 +49,6 @@ El servicio contiene reglas de negocio:
 - Verificar que los campos obligatorios existan.
 
 ---
-
 ## 4. DTO / Schema Validation
 
 Archivo:
@@ -60,11 +56,9 @@ Archivo:
 ```text
 src/schemas/incidentSchemas.js
 ```
-
 Los esquemas definen la forma esperada de los datos de entrada y salida.
 
 ---
-
 ## 5. Dependency Injection simple
 
 Archivo:
@@ -81,27 +75,3 @@ const service = new IncidentService(repository);
 ```
 
 Así, el servicio depende de una abstracción práctica del repositorio y no crea directamente la base de datos.
-
----
-
-# Relación con SOLID
-
-## SRP
-
-Cada clase/módulo tiene una responsabilidad clara.
-
-## OCP
-
-Se pueden agregar nuevos tipos de incidencia extendiendo las listas de tipos y reglas.
-
-## LSP
-
-Los módulos que usan el repositorio pueden trabajar con cualquier implementación que respete los mismos métodos.
-
-## ISP
-
-No se usa una interfaz gigante; cada módulo expone solo lo necesario.
-
-## DIP
-
-El servicio no crea directamente la base de datos; recibe un repositorio externo.
