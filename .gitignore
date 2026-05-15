@@ -1,0 +1,24 @@
+# Node.js
+node_modules/
+
+# Variables de entorno
+.env
+
+# Bases de datos locales
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Cobertura y builds
+coverage/
+dist/
+build/

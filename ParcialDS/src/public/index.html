@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen Parcial DS</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-brand">
+      <img src="/logo.svg" alt="Logo de Incidencias" class="logo" />
+      <div>
+        <h1>REGISTRO DE INCIDENCIAS CIUDADANAS</h1>
+        <p>Reporta problemas de alumbrado, basura, seguridad ciudadana o emergencia.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card">
+      <h2>Nueva incidencia</h2>
+
+      <form id="incidentForm">
+        <label>
+          Tipo de incidencia
+          <select name="tipo" required>
+            <option value="ALUMBRADO_PUBLICO">Alumbrado público</option>
+            <option value="BASURA">Basura acumulada</option>
+            <option value="SEGURIDAD_CIUDADANA">Seguridad ciudadana</option>
+            <option value="EMERGENCIA">Emergencia</option>
+          </select>
+        </label>
+
+        <label>
+          Título
+          <input name="titulo" required minlength="3" placeholder="Ejemplo: Poste apagado" />
+        </label>
+
+        <label>
+          Descripción
+          <textarea name="descripcion" required minlength="5" placeholder="Describe el problema"></textarea>
+        </label>
+
+        <div class="grid-2">
+          <label>
+            Dirección
+            <input name="direccion" required placeholder="Av. Principal 123" />
+          </label>
+
+          <label>
+            Distrito
+            <input name="distrito" required placeholder="Lima" />
+          </label>
+        </div>
+
+        <div class="grid-3">
+          <label>
+            Latitud
+            <input name="lat" type="number" step="any" placeholder="-12.0464" />
+          </label>
+
+          <label>
+            Longitud
+            <input name="lng" type="number" step="any" placeholder="-77.0428" />
+          </label>
+
+          <label>
+            Prioridad
+            <select name="prioridad">
+              <option value="BAJA">Baja</option>
+              <option value="MEDIA" selected>Media</option>
+              <option value="ALTA">Alta</option>
+              <option value="URGENTE">Urgente</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <label>
+            Nombre del reportante
+            <input name="reportanteNombre" placeholder="Nombre opcional" />
+          </label>
+
+          <label>
+            Contacto
+            <input name="reportanteContacto" placeholder="Correo o teléfono" />
+          </label>
+        </div>
+
+        <label>
+          Evidencias
+          <input name="evidencias" type="file" multiple accept="image/*,video/*,audio/*" />
+        </label>
+
+        <button type="submit">Registrar incidencia</button>
+      </form>
+
+      <p id="formMessage" class="message"></p>
+    </section>
+
+    <section class="card">
+      <div class="section-title">
+        <h2>Incidencias registradas</h2>
+        <button id="reloadButton" type="button">Actualizar</button>
+      </div>
+
+      <div class="filters">
+        <select id="filterTipo">
+          <option value="">Todos los tipos</option>
+          <option value="ALUMBRADO_PUBLICO">Alumbrado público</option>
+          <option value="BASURA">Basura</option>
+          <option value="SEGURIDAD_CIUDADANA">Seguridad ciudadana</option>
+          <option value="EMERGENCIA">Emergencia</option>
+        </select>
+
+        <select id="filterEstado">
+          <option value="">Todos los estados</option>
+          <option value="REGISTRADO">Registrado</option>
+          <option value="VALIDADO">Validado</option>
+          <option value="EN_ATENCION">En atención</option>
+          <option value="RESUELTO">Resuelto</option>
+          <option value="RECHAZADO">Rechazado</option>
+        </select>
+      </div>
+
+      <div id="incidentList" class="incident-list"></div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
