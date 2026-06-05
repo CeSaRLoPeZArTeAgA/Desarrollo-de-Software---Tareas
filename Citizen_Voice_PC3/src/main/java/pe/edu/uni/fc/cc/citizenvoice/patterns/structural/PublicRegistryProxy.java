@@ -25,3 +25,4 @@ public class PublicRegistryProxy {
         return findCitizen(dni).map(c -> flyweightFactory.get(c.publicKeyBase64()));
     }
 }
+

@@ -9,3 +9,4 @@ public interface CitizenPublicRepository {
     long count();
     void clear();
 }
+

@@ -16,3 +16,5 @@ public class ResourcesComponent implements ArchiveComponent {
         return sb.toString();
     }
 }
+
+

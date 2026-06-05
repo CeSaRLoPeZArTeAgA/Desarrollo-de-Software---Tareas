@@ -17,3 +17,4 @@ public class FileRepositoryFactory implements RepositoryAbstractFactory {
     @Override public ResourceRepository resourceRepository() { return new FileResourceRepository(config.resourcePath()); }
     @Override public SubmissionRepository submissionRepository() { return new FileSubmissionRepository(config.submissionPath()); }
 }
+

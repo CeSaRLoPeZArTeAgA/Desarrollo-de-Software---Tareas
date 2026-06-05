@@ -11,3 +11,5 @@ public class SubmissionServiceBridge {
     public void send(SubmissionRecord record, String archiveBody) { channel.submit(record, archiveBody); }
     public String channelName() { return channel.name(); }
 }
+
+

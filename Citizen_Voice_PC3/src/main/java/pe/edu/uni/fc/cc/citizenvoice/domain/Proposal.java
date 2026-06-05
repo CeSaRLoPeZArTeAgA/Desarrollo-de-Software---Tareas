@@ -36,3 +36,4 @@ public class Proposal {
         this.submittedAt = submittedAt;
     }
 }
+

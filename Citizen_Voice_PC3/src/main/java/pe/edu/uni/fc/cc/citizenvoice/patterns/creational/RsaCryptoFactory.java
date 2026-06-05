@@ -8,3 +8,4 @@ public class RsaCryptoFactory extends CryptoFactory {
     @Override public DigitalSignatureAdapter createSignatureAdapter() { return new ProtocolRsaSignatureAdapter(); }
     @Override public KeyPairFactory createKeyPairFactory() { return new RsaKeyPairFactory(); }
 }
+

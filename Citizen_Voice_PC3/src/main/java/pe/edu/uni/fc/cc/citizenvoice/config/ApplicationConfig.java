@@ -69,3 +69,4 @@ public final class ApplicationConfig {
         catch (Exception ignored) { return fallback; }
     }
 }
+

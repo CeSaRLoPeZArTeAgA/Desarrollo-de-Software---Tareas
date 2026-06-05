@@ -87,3 +87,4 @@ public class RegistrySeeder {
         return false;
     }
 }
+

@@ -11,3 +11,4 @@ public interface CitizenPrivateRepository {
     long count();
     void clear();
 }
+

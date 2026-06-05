@@ -15,3 +15,4 @@ public class CitizenPublic {
     public String fullName() { return fullName; }
     public String publicKeyBase64() { return publicKeyBase64; }
 }
+

@@ -4,3 +4,4 @@ public abstract class ArchiveDecorator implements ArchiveComponent {
     protected final ArchiveComponent delegate;
     protected ArchiveDecorator(ArchiveComponent delegate) { this.delegate = delegate; }
 }
+

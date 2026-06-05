@@ -11,3 +11,4 @@ public interface ProposalRepository {
     void update(Proposal proposal);
     void clear();
 }
+

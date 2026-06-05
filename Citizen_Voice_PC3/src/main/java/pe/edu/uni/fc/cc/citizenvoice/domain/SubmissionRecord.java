@@ -21,3 +21,4 @@ public class SubmissionRecord {
     public String channel() { return channel; }
     public String destinationOffice() { return destinationOffice; }
 }
+

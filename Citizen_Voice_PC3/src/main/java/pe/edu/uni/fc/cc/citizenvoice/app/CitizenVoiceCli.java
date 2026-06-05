@@ -78,3 +78,4 @@ public class CitizenVoiceCli {
     private static long longArg(String[] args, String key, long fallback) { return Long.parseLong(strArg(args, key, String.valueOf(fallback))); }
     private static boolean has(String[] args, String key) { for (String a : args) if (a.equals(key)) return true; return false; }
 }
+

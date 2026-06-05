@@ -15,3 +15,5 @@ public class ProposalTextComponent implements ArchiveComponent {
                 "Descripcion:\n" + proposal.description() + "\n";
     }
 }
+
+

@@ -29,3 +29,4 @@ public class OperationResult {
     public long signatures() { return signatures; }
     public String hash() { return hash; }
 }
+

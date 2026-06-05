@@ -16,3 +16,4 @@ public final class Codec {
         return new String(Base64.getDecoder().decode(encoded), StandardCharsets.UTF_8);
     }
 }
+

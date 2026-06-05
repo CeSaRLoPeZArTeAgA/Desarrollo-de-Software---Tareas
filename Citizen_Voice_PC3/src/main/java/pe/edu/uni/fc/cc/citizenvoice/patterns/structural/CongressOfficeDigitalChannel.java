@@ -19,3 +19,4 @@ public class CongressOfficeDigitalChannel implements SubmissionChannel {
         FileUtil.writeString(file, archiveBody + "\n[ENVIO]\nCanal: " + record.channel() + "\nDestino: " + record.destinationOffice() + "\nFecha: " + record.submittedAt() + "\n");
     }
 }
+

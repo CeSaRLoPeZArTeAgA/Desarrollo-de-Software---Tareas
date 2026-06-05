@@ -53,3 +53,4 @@ public final class ApplicationContext {
     public RsaCryptoFactory cryptoFactory() { return cryptoFactory; }
     public CitizenVoiceFacade facade() { return facade; }
 }
+

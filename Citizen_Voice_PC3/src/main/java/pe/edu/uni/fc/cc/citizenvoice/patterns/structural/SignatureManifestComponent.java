@@ -22,3 +22,5 @@ public class SignatureManifestComponent implements ArchiveComponent {
         return sb.toString();
     }
 }
+
+

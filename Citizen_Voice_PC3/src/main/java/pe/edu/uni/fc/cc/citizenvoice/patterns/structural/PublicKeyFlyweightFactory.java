@@ -16,3 +16,4 @@ public class PublicKeyFlyweightFactory {
 
     public int size() { return cache.size(); }
 }
+

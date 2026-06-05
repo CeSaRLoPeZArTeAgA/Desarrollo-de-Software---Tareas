@@ -14,3 +14,4 @@ public final class Constants {
     public static final int DEFAULT_SIGNATURE_THRESHOLD = 25_000;
     public static final int DEFAULT_GENERAL_REGISTRY_SIZE = 100_000;
 }
+

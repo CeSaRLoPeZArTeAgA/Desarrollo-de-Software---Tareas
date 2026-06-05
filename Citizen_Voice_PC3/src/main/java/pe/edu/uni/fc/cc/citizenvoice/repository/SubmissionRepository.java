@@ -8,3 +8,4 @@ public interface SubmissionRepository {
     List<SubmissionRecord> findByProposal(long proposalId);
     void clear();
 }
+

@@ -5,3 +5,4 @@ import java.security.KeyPair;
 public interface KeyPairFactory {
     KeyPair generate(int keySize);
 }
+
