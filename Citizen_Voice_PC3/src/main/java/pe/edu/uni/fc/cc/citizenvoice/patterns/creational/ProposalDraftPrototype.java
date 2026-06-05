@@ -25,4 +25,3 @@ public class ProposalDraftPrototype implements Cloneable {
         catch (CloneNotSupportedException e) { throw new AssertionError(e); }
     }
 }
-

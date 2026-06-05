@@ -175,4 +175,3 @@ public class CitizenVoiceFacade {
         if (text == null || text.isBlank()) throw new IllegalArgumentException("Campo obligatorio: " + field);
     }
 }
-

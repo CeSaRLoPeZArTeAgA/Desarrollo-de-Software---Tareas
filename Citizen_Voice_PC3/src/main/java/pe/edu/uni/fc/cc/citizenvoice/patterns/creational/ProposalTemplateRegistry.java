@@ -29,4 +29,3 @@ public final class ProposalTemplateRegistry {
 
     public Map<String, ProposalDraftPrototype> list() { return new LinkedHashMap<>(templates); }
 }
-

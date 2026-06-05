@@ -6,5 +6,3 @@ public abstract class CryptoFactory {
     public abstract DigitalSignatureAdapter createSignatureAdapter();
     public abstract KeyPairFactory createKeyPairFactory();
 }
-
-

@@ -73,4 +73,3 @@ public final class SimpleJson {
         return s.replace("\\n", "\n").replace("\\r", "\r").replace("\\\"", "\"").replace("\\\\", "\\");
     }
 }
-

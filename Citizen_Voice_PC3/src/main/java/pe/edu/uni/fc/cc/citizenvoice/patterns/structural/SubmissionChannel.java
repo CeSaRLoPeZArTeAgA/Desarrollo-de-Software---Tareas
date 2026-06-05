@@ -6,5 +6,3 @@ public interface SubmissionChannel {
     String name();
     void submit(SubmissionRecord record, String archiveBody);
 }
-
-

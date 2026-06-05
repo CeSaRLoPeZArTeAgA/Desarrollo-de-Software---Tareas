@@ -18,4 +18,3 @@ public class HashingArchiveDecorator extends ArchiveDecorator {
         return body + "\n[CONGELAMIENTO CRIPTOGRAFICO]\nSHA-256: " + hashHex() + "\n";
     }
 }
-

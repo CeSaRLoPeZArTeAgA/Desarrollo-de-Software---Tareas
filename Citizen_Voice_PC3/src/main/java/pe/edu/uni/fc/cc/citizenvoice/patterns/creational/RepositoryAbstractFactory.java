@@ -10,4 +10,3 @@ public interface RepositoryAbstractFactory {
     ResourceRepository resourceRepository();
     SubmissionRepository submissionRepository();
 }
-

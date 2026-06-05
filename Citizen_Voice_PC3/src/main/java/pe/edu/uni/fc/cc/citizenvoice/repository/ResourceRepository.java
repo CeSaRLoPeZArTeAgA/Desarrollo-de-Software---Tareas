@@ -8,4 +8,3 @@ public interface ResourceRepository {
     List<ProposalResource> findByProposal(long proposalId);
     void clear();
 }
-

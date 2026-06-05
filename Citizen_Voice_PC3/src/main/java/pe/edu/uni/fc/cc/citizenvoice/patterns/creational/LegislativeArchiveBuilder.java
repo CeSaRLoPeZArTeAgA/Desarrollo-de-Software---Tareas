@@ -26,4 +26,3 @@ public class LegislativeArchiveBuilder {
                 .add(new SignatureManifestComponent(signatures));
     }
 }
-

@@ -47,4 +47,3 @@ public class ProtocolRsaSignatureAdapter implements DigitalSignatureAdapter {
         return HashUtil.toHex(HashUtil.sha256(message));
     }
 }
-

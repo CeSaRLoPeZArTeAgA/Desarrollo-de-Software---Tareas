@@ -1,0 +1,6 @@
+build/
+data/*.db
+data/archives/
+data/submissions/
+*.class
+.DS_Store

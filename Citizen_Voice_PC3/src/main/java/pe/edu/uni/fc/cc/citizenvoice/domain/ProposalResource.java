@@ -18,5 +18,3 @@ public class ProposalResource {
     public String content() { return content; }
     public String createdAt() { return createdAt; }
 }
-
-

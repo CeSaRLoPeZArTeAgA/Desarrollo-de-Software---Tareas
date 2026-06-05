@@ -10,4 +10,3 @@ public interface SignatureRepository {
     List<SignatureRecord> findByProposal(long proposalId);
     void clear();
 }
-

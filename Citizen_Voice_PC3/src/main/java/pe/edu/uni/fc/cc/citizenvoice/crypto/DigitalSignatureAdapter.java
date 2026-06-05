@@ -8,4 +8,3 @@ public interface DigitalSignatureAdapter {
     boolean verify(byte[] message, String signatureBase64, PublicKey publicKey);
     String hashHex(byte[] message);
 }
-
