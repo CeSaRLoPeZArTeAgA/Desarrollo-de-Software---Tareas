@@ -1,0 +1,13 @@
+services:
+  citizen-voice-java:
+    build: .
+    container_name: citizen-voice-java-pc3
+    ports:
+      - "8080:8080"
+    environment:
+      - CITIZEN_VOICE_DATA_DIR=/app/data
+      - CITIZEN_VOICE_PORT=8080
+      - SIGNATURE_THRESHOLD=25000
+      - RSA_KEY_SIZE=2048
+    volumes:
+      - ./data:/app/data
