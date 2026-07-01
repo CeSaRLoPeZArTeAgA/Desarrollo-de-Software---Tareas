@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero small-hero">
+  <div>
+    <span class="eyebrow">Buscador multipropósito</span>
+    <h1>Busca por imagen y metadatos</h1>
+    <p>Selecciona la intención obligatoria: Adopción, Venta certificada o Verificar pérdida.</p>
+  </div>
+</section>
+
+<section class="section form-grid single">
+  <article class="form-card">
+    <form action="/search" method="post" enctype="multipart/form-data">
+      <label>Imagen JPEG/PNG<input type="file" name="image" accept="image/png,image/jpeg"></label>
+      <label>Intención
+        <select name="intent" required>
+          <option value="adoption">Adopción</option>
+          <option value="sale">Venta: criaderos certificados</option>
+          <option value="verify_loss">Verificar pérdida</option>
+        </select>
+      </label>
+      <div class="two-cols">
+        <label>Especie<input name="species" value="perro"></label>
+        <label>Raza<input name="breed" value="labrador"></label>
+      </div>
+      <button type="submit" class="btn btn-primary full">Buscar</button>
+    </form>
+  </article>
+</section>
+{% endblock %}

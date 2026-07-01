@@ -1,0 +1,13 @@
+services:
+  mascotas-uni:
+    build: .
+    container_name: mascotas_uni_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./src/pet_alerts/uploads:/app/src/pet_alerts/uploads
+    environment:
+      - DATABASE_PATH=data/mascotas_uni.db
+      - DEFAULT_ALERT_RADIUS_METERS=1000
+      - ALERT_LATENCY_LIMIT_SECONDS=5

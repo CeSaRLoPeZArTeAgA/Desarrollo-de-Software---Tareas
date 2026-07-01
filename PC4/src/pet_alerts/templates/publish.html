@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero small-hero">
+  <div>
+    <span class="eyebrow">Publicar anuncio</span>
+    <h1>Registra una mascota perdida o un avistamiento</h1>
+    <p>No se requiere iniciar sesión. Para la demo, los datos quedan guardados en SQLite.</p>
+  </div>
+</section>
+
+<section class="section form-grid">
+  <article class="form-card">
+    <h2>Registrar mascota perdida</h2>
+    <form action="/reports/lost" method="post" enctype="multipart/form-data">
+      <div class="two-cols">
+        <label>Nombre de la mascota<input name="pet_name" required value="Max"></label>
+        <label>Especie<input name="species" required value="perro"></label>
+      </div>
+      <div class="two-cols">
+        <label>Raza<input name="breed" required value="labrador"></label>
+        <label>Radio de alerta<input name="radius_meters" type="number" value="1000" min="100" max="10000"></label>
+      </div>
+      <label>Descripción<textarea name="description" required>Collar rojo, responde al nombre Max.</textarea></label>
+      <label>Foto JPEG/PNG<input type="file" name="photo" accept="image/png,image/jpeg"></label>
+      <div class="two-cols">
+        <label>Latitud<input name="latitude" type="number" step="0.000001" value="-12.024" required></label>
+        <label>Longitud<input name="longitude" type="number" step="0.000001" value="-77.049" required></label>
+      </div>
+      <div class="two-cols">
+        <label>Dueño<input name="owner_name" required value="César López"></label>
+        <label>Email<input name="owner_email" type="email" required value="dueno@example.com"></label>
+      </div>
+      <label>Teléfono<input name="owner_phone" required value="999888777"></label>
+      <button type="submit" class="btn btn-primary full">Registrar y enviar alerta</button>
+      <p class="muted">Los datos personales se anonimizan en la vista pública.</p>
+    </form>
+  </article>
+
+  <article class="form-card">
+    <h2>Registrar avistamiento</h2>
+    <form action="/reports/sighting" method="post" enctype="multipart/form-data">
+      <div class="two-cols">
+        <label>Especie<input name="species" required value="perro"></label>
+        <label>Raza aproximada<input name="breed" value="labrador"></label>
+      </div>
+      <label>Descripción<textarea name="description" required>Visto cerca de la puerta principal.</textarea></label>
+      <label>Foto JPEG/PNG<input type="file" name="photo" accept="image/png,image/jpeg"></label>
+      <div class="two-cols">
+        <label>Latitud<input name="latitude" type="number" step="0.000001" value="-12.023" required></label>
+        <label>Longitud<input name="longitude" type="number" step="0.000001" value="-77.048" required></label>
+      </div>
+      <label>Alias<input name="reporter_alias" value="Ciudadano anónimo"></label>
+      <button type="submit" class="btn btn-primary full">Registrar avistamiento</button>
+    </form>
+  </article>
+</section>
+{% endblock %}

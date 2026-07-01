@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero small-hero">
+  <div>
+    <span class="eyebrow">Adopción responsable</span>
+    <h1>Mascotas disponibles para adopción</h1>
+    <p>Resultados provenientes exclusivamente del catálogo de protectoras y ONGs.</p>
+  </div>
+  <a class="btn btn-primary" href="/buscar-por-imagen">Buscar por imagen</a>
+</section>
+
+<section class="section">
+  <div class="cards-grid">
+    {% for item in adoptions %}
+    <article class="animal-card">
+      <img src="{{ url_for('static', path='/img/pet_placeholder.svg') }}" alt="{{ item.title }}">
+      <div class="animal-card-body">
+        <span class="badge success">ONG/Protectora</span>
+        <h2>{{ item.title }}</h2>
+        <p>{{ item.description }}</p>
+        <div class="meta-line"><span>{{ item.species|capitalize }}</span><span>{{ item.breed|capitalize }}</span><span>{{ item.location }}</span></div>
+      </div>
+    </article>
+    {% else %}
+    <p class="empty">No hay mascotas en adopción registradas.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

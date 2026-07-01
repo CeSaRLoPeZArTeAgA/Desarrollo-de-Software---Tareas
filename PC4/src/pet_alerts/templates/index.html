@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="hero-content">
+    <span class="eyebrow">Plataforma gratuita y sin fines de lucro</span>
+    <h1>Conecta mascotas perdidas, familias, cuidadores y adopciones responsables.</h1>
+    <p>Registra una alerta, revisa avistamientos, consulta adopciones y usa el buscador multipropósito por imagen desde una sola aplicación funcional con base de datos SQLite.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/publicar-anuncio">Publicar anuncio</a>
+      <a class="btn btn-secondary" href="/perdidos-y-encontrados">Ver perdidos</a>
+    </div>
+  </div>
+  <div class="hero-card">
+    <img src="{{ url_for('static', path='/img/pet_placeholder.svg') }}" alt="Mascota ilustrativa">
+    <h2>Alertas rápidas</h2>
+    <p>Notificaciones simuladas en radio configurable con privacidad del dueño mediante Proxy.</p>
+    <div class="stat-row">
+      <span><strong>{{ reports|length }}</strong> reportes</span>
+      <span><strong>{{ caregivers|length }}</strong> cuidadores</span>
+    </div>
+  </div>
+</section>
+
+<section class="section narrow">
+  <div class="section-title">
+    <span class="eyebrow">Módulos principales</span>
+    <h2>Las mascotas son nuestros mejores amigos, nos toca protegerlos.</h2>
+  </div>
+  <div class="feature-grid">
+    <a class="feature-card" href="/adopcion">
+      <span class="feature-icon">🐶</span>
+      <h3>Adopción</h3>
+      <p>Catálogo inicial de mascotas disponibles en protectoras y ONGs.</p>
+    </a>
+    <a class="feature-card" href="/perdidos-y-encontrados">
+      <span class="feature-icon">📍</span>
+      <h3>Perdidos y Encontrados</h3>
+      <p>Reportes activos con ubicación, estado y avistamientos ciudadanos.</p>
+    </a>
+    <a class="feature-card" href="/buscar-por-imagen">
+      <span class="feature-icon">🖼️</span>
+      <h3>Búsqueda por Imagen</h3>
+      <p>Selecciona intención: Adopción, Venta certificada o Verificar pérdida.</p>
+    </a>
+    <a class="feature-card" href="/cuidadores">
+      <span class="feature-icon">🤝</span>
+      <h3>Cuidadores</h3>
+      <p>Red de cuidadores solidarios, profesionales y especializados.</p>
+    </a>
+  </div>
+</section>
+
+<section class="section split-section">
+  <div class="panel">
+    <div class="section-title compact">
+      <span class="eyebrow">Últimos reportes</span>
+      <h2>Mascotas perdidas y avistamientos</h2>
+    </div>
+    <div class="pet-list compact-list">
+      {% for r in reports[:4] %}
+      <article class="pet-row">
+        <img src="{{ r.pet.photo_path if r.pet.photo_path else url_for('static', path='/img/pet_placeholder.svg') }}" alt="{{ r.pet.name }}">
+        <div>
+          <h3>{{ r.pet.name }}</h3>
+          <p>{{ r.pet.species|capitalize }} · {{ r.pet.breed|capitalize }}</p>
+          <span class="badge">{{ 'Perdido' if r.report_type.value == 'lost_pet' else 'Avistamiento' }}</span>
+        </div>
+      </article>
+      {% else %}
+      <p class="empty">No hay reportes todavía.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="panel accent-panel">
+    <span class="eyebrow">Arquitectura</span>
+    <h2>Patrones usados</h2>
+    <p>Factory Method, Abstract Factory, Builder, Singleton, Adapter, Facade, Proxy, Bridge, Decorator, Strategy, Observer, Command, Chain of Responsibility y State.</p>
+    <a href="/docs" class="btn btn-light">Ver API Swagger</a>
+  </div>
+</section>
+{% endblock %}

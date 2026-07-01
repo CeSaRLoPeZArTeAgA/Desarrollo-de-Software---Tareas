@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero small-hero">
+  <div>
+    <span class="eyebrow">Perdidos y encontrados</span>
+    <h1>Ayuda a reunir mascotas con sus familias</h1>
+    <p>Consulta reportes activos y avistamientos. Los datos personales del dueño permanecen protegidos.</p>
+  </div>
+  <a class="btn btn-primary" href="/publicar-anuncio">Publicar reporte</a>
+</section>
+
+<section class="section filters-panel">
+  <form method="get" action="/perdidos-y-encontrados" class="inline-form">
+    <label>Tipo
+      <select name="tipo">
+        <option value="all" {{ 'selected' if tipo == 'all' else '' }}>Todos</option>
+        <option value="lost_pet" {{ 'selected' if tipo == 'lost_pet' else '' }}>Perdidos</option>
+        <option value="sighting" {{ 'selected' if tipo == 'sighting' else '' }}>Encontrados / Avistamientos</option>
+      </select>
+    </label>
+    <label>Especie
+      <input name="species" value="{{ species }}" placeholder="perro, gato">
+    </label>
+    <button class="btn btn-primary" type="submit">Filtrar</button>
+    <a class="btn btn-secondary" href="/perdidos-y-encontrados">Limpiar filtros</a>
+  </form>
+</section>
+
+<section class="section">
+  <div class="cards-grid">
+    {% for r in reports %}
+    <article class="animal-card">
+      <img src="{{ r.pet.photo_path if r.pet.photo_path else url_for('static', path='/img/pet_placeholder.svg') }}" alt="{{ r.pet.name }}">
+      <div class="animal-card-body">
+        <span class="badge {{ 'danger' if r.report_type.value == 'lost_pet' else 'info' }}">{{ 'Perdido' if r.report_type.value == 'lost_pet' else 'Avistamiento' }}</span>
+        <h2>{{ r.pet.name }}</h2>
+        <p>{{ r.description }}</p>
+        <div class="meta-line"><span>{{ r.pet.species|capitalize }}</span><span>{{ r.pet.breed|capitalize }}</span><span>{{ '%.4f'|format(r.location.latitude) }}, {{ '%.4f'|format(r.location.longitude) }}</span></div>
+        <p class="muted">Estado: {{ r.status.value }} · Contacto público: canal protegido por la plataforma.</p>
+      </div>
+    </article>
+    {% else %}
+    <p class="empty">No hay reportes que coincidan con el filtro.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

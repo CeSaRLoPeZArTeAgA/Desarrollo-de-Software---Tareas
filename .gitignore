@@ -1,24 +1,98 @@
-# Node.js
-node_modules/
+# ==============================
+# Python virtual environments
+# ==============================
+.venv/
+.venv_pc4/
+venv/
+env/
+ENV/
 
-# Variables de entorno
+# ==============================
+# Python cache / bytecode
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# ==============================
+# Pytest / coverage
+# ==============================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.cache/
+.tox/
+.nox/
+
+# ==============================
+# Environment variables
+# ==============================
 .env
+.env.local
+.env.*.local
 
-# Bases de datos locales
+# Keep example env file
+!.env.example
+
+# ==============================
+# Local databases generated in demo
+# ==============================
 *.db
 *.sqlite
 *.sqlite3
 
-# Logs
-logs/
-*.log
-npm-debug.log*
+# Keep the data folder if it has .gitkeep
+!data/.gitkeep
 
-# Sistema operativo
+# ==============================
+# Logs
+# ==============================
+*.log
+logs/
+
+# ==============================
+# Temporary files
+# ==============================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# ==============================
+# Operating system files
+# ==============================
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Cobertura y builds
-coverage/
-dist/
+# ==============================
+# IDE / editor files
+# ==============================
+.vscode/
+.idea/
+*.code-workspace
+
+# ==============================
+# Build / distribution
+# ==============================
 build/
+dist/
+*.egg-info/
+
+# ==============================
+# Generated compressed files
+# ==============================
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# ==============================
+# Docker local overrides
+# ==============================
+docker-compose.override.yml

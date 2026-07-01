@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title|default('UNI Huellitas') }}</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', path='/img/logo_uni.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/styles.css') }}">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Inicio UNI Huellitas">
+    <img src="{{ url_for('static', path='/img/logo_uni.png') }}" alt="Logo UNI">
+    <div>
+      <strong>UNI Huellitas</strong>
+      <span class="sr-only">UNI Mascotas</span>
+      <span>Adopción, búsqueda y cuidado responsable</span>
+    </div>
+  </a>
+  <nav class="main-nav" aria-label="Navegación principal">
+    <a href="/adopcion">Adopción</a>
+    <a href="/perdidos-y-encontrados">Perdidos y Encontrados</a>
+    <a href="/buscar-por-imagen">Buscar por Imagen</a>
+    <a href="/cuidadores">Cuidadores</a>
+    <a href="/publicar-anuncio" class="nav-cta">Publicar Anuncio</a>
+  </nav>
+</header>
+
+<main>
+  {% if message %}<div class="flash-message">{{ message }}</div>{% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <img src="{{ url_for('static', path='/img/logo_uni.png') }}" alt="Logo UNI">
+        <strong>UNI Huellitas</strong>
+      </div>
+      <p>Plataforma académica para reportes de mascotas perdidas, adopción, búsqueda por imagen y red de cuidadores.</p>
+    </div>
+    <div>
+      <h3>Navegación</h3>
+      <a href="/adopcion">Adopción</a>
+      <a href="/perdidos-y-encontrados">Perdidos y Encontrados</a>
+      <a href="/publicar-anuncio">Publicar Anuncio</a>
+      <a href="/cuidadores">Cuidadores</a>
+    </div>
+    <div>
+      <h3>API</h3>
+      <a href="/docs">Swagger UI</a>
+      <a href="/api/reports">Reportes JSON</a>
+      <a href="/api/caregivers">Cuidadores JSON</a>
+    </div>
+    <div>
+      <h3>Proyecto</h3>
+      <p>Diseño de Software con patrones creacionales, estructurales y de comportamiento.</p>
+      <p class="muted">Sin inicio de sesión obligatorio.</p>
+    </div>
+  </div>
+  <div class="copyright">© 2026 UNI Huellitas · Hecho para fines académicos.</div>
+</footer>
+</body>
+</html>

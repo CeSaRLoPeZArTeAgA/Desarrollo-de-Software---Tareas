@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero small-hero">
+  <div>
+    <span class="eyebrow">Red de cuidadores</span>
+    <h1>Cuidadores solidarios, profesionales y especializados</h1>
+    <p>Registra cuidadores y controla si reciben alertas de mascotas perdidas.</p>
+  </div>
+</section>
+
+<section class="section form-grid">
+  <article class="form-card">
+    <h2>Registrar cuidador</h2>
+    <form action="/caregivers" method="post">
+      <label>Nombre completo<input name="full_name" required value="Ana Torres"></label>
+      <label>DNI<input name="dni" required value="12345678" maxlength="8"></label>
+      <label>Rol
+        <select name="role">
+          <option value="solidary">Cuidador solidario</option>
+          <option value="professional">Profesional</option>
+          <option value="specialized">Especializado</option>
+        </select>
+      </label>
+      <label>Especies aceptadas<input name="species_accepted" required value="perros, gatos"></label>
+      <label>Tamaños aceptados<input name="size_accepted" required value="pequeño, mediano"></label>
+      <label class="check-row"><input type="checkbox" name="medication" value="true"> Administra medicamentos</label>
+      <label class="check-row"><input type="checkbox" name="accepts_lost_pet_alerts" value="true" checked> Recibir alertas de mascotas perdidas</label>
+      <button type="submit" class="btn btn-primary full">Registrar cuidador</button>
+    </form>
+  </article>
+
+  <article class="panel accent-panel">
+    <span class="eyebrow">Confiabilidad</span>
+    <h2>Validación de identidad</h2>
+    <p>La aplicación valida el formato del DNI y simula el proveedor externo mediante Adapter. Los perfiles verificados pueden mostrarse públicamente.</p>
+  </article>
+</section>
+
+<section class="section">
+  <div class="cards-grid">
+    {% for c in caregivers %}
+    <article class="caregiver-card">
+      <div class="avatar">{{ c.full_name[:1] }}</div>
+      <div>
+        <span class="badge success">{{ c.status.value }}</span>
+        <h2>{{ c.full_name }}</h2>
+        <p>{{ c.role.value }} · Rating {{ '%.1f'|format(c.average_rating) }}</p>
+        <p class="muted">Acepta: {{ c.species_accepted }} · Tamaños: {{ c.size_accepted }}</p>
+        <form action="/caregivers/{{ c.id }}/toggle" method="post" class="toggle-form">
+          <input type="hidden" name="enabled" value="{{ 'false' if c.accepts_lost_pet_alerts else 'true' }}">
+          <button type="submit" class="btn btn-secondary">{{ 'Desactivar alertas' if c.accepts_lost_pet_alerts else 'Activar alertas' }}</button>
+        </form>
+      </div>
+    </article>
+    {% else %}
+    <p class="empty">No hay cuidadores registrados.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

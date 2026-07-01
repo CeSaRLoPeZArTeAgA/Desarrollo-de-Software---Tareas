@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-hero small-hero">
+  <div>
+    <span class="eyebrow">Resultados</span>
+    <h1>Resultados del buscador multipropósito</h1>
+    <p>Filtrado según la intención seleccionada por el usuario.</p>
+  </div>
+  <a class="btn btn-secondary" href="/buscar-por-imagen">Nueva búsqueda</a>
+</section>
+
+<section class="section">
+  <div class="cards-grid">
+    {% for r in results %}
+    <article class="result-card">
+      <span class="badge {{ 'success' if r.source == 'ONG/Protectora' else 'info' if r.source == 'Alerta activa' else 'warning' }}">{{ r.source }}</span>
+      <h2>{{ r.title }}</h2>
+      <p>{{ r.description }}</p>
+      <div class="meta-line"><span>Score {{ '%.2f'|format(r.score) }}</span><span>{{ r.location }}</span><span>{{ 'Certificado' if r.certified else 'No certificado' }}</span></div>
+    </article>
+    {% else %}
+    <p class="empty">No se encontraron resultados para la intención seleccionada.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
