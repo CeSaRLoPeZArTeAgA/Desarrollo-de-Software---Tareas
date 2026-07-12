@@ -1,0 +1,106 @@
+"""Excepciones de dominio y handlers HTTP centralizados."""
+
+from __future__ import annotations
+
+from fastapi import FastAPI, Request, status
+from fastapi.responses import JSONResponse
+
+from src.logging_config import get_logger
+
+logger = get_logger(__name__)
+
+
+class DominioVotacionError(Exception):
+    """Excepcion base para errores de dominio del modulo de votacion."""
+
+    http_status: int = status.HTTP_400_BAD_REQUEST
+
+    def __init__(self, mensaje: str) -> None:
+        super().__init__(mensaje)
+        self.mensaje: str = mensaje
+
+
+class SolicitudNoEncontradaError(DominioVotacionError):
+    """La solicitud referenciada no existe."""
+
+    http_status: int = status.HTTP_404_NOT_FOUND
+
+
+class SolicitudDuplicadaError(DominioVotacionError):
+    """Se intento persistir una solicitud cuyo id ya existe."""
+
+    http_status: int = status.HTTP_409_CONFLICT
+
+
+class SolicitudYaDerivadaError(DominioVotacionError):
+    """La solicitud ya fue derivada previamente y no puede re-derivarse."""
+
+    http_status: int = status.HTTP_409_CONFLICT
+
+
+class NoAutorizadoError(DominioVotacionError):
+    """El llamante no tiene rol administrador."""
+
+    http_status: int = status.HTTP_403_FORBIDDEN
+
+
+class CredencialesInvalidasError(DominioVotacionError):
+    """Username/password no validos en login."""
+
+    http_status: int = status.HTTP_401_UNAUTHORIZED
+
+
+class TokenInvalidoError(DominioVotacionError):
+    """JWT ausente, malformado o expirado."""
+
+    http_status: int = status.HTTP_401_UNAUTHORIZED
+
+
+class PermisoDenegadoError(DominioVotacionError):
+    """Usuario autenticado sin rol suficiente."""
+
+    http_status: int = status.HTTP_403_FORBIDDEN
+
+
+class UsuarioDuplicadoError(DominioVotacionError):
+    """Username ya existe al registrar."""
+
+    http_status: int = status.HTTP_409_CONFLICT
+
+
+class UsuarioNoEncontradoError(DominioVotacionError):
+    """No existe usuario con el identificador dado."""
+
+    http_status: int = status.HTTP_404_NOT_FOUND
+
+
+class DocumentoInvalidoError(DominioVotacionError):
+    """El numero de documento no cumple el formato del tipo_persona (MDP-15)."""
+
+    http_status: int = status.HTTP_422_UNPROCESSABLE_CONTENT
+
+
+def register_exception_handlers(app: FastAPI) -> None:
+    """Registra los handlers HTTP para las excepciones de dominio.
+
+    Args:
+        app: Instancia de ``FastAPI`` sobre la que se registran los handlers.
+    """
+
+    @app.exception_handler(DominioVotacionError)
+    async def _dominio_handler(
+        _request: Request, exc: DominioVotacionError
+    ) -> JSONResponse:
+        logger.warning("Error de dominio: %s", exc.mensaje)
+        return JSONResponse(
+            status_code=exc.http_status,
+            content={"detail": exc.mensaje, "tipo": exc.__class__.__name__},
+        )
+
+    @app.exception_handler(Exception)
+    async def _unhandled_handler(_request: Request, exc: Exception) -> JSONResponse:
+        logger.exception("Error no controlado: %s", exc)
+        return JSONResponse(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            content={"detail": "Error interno del servidor."},
+        )

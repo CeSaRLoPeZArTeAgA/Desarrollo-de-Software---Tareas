@@ -96,3 +96,7 @@ dist/
 # Docker local overrides
 # ==============================
 docker-compose.override.yml
+
+# Archivos generados de FinalDS
+FinalDS/frontend/*.tsbuildinfo
+FinalDS/supabase/.branches/

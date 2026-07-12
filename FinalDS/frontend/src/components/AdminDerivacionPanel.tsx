@@ -1,0 +1,383 @@
+/**
+ * Panel del administrador para derivar solicitudes entrantes.
+ * Se ocupa de la presentacion: el ciclo asincrono vive en
+ * ``useDerivacion`` y la notificación de exito/error se delega a
+ * ``toaster`` global.
+ */
+
+import {
+  useEffect,
+  useMemo,
+  useState,
+  type FormEvent,
+  type ReactElement,
+} from "react";
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Heading,
+  HStack,
+  NativeSelect,
+  Stack,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
+
+import { toaster } from "@/components/ui/toaster";
+import { TipoPersonaSelector } from "@/components/TipoPersonaSelector";
+import { sugerirDependencia } from "@/api/derivacionApi";
+import { useAuth } from "@/hooks/useAuth";
+import { useDerivacion } from "@/hooks/useDerivacion";
+import { ApiError } from "@/types/voting";
+import {
+  CATALOGO_DEPENDENCIAS,
+  Dependencia,
+  type DependenciaCatalogoItem,
+  type Solicitud,
+  type SugerenciaDependenciaResponse,
+} from "@/types/derivacion";
+import { CATALOGO_TIPO_PERSONA, TipoPersona } from "@/types/tipoPersona";
+
+const SIN_SELECCION = "" as const;
+
+function esFinDeSemana(fecha: Date): boolean {
+  const dia = fecha.getDay();
+  return dia === 0 || dia === 6;
+}
+
+function calcularFechaMaxima(plazoDiasHabiles: number): Date {
+  const fecha = new Date();
+  let restantes = plazoDiasHabiles;
+  while (restantes > 0) {
+    fecha.setDate(fecha.getDate() + 1);
+    if (!esFinDeSemana(fecha)) restantes -= 1;
+  }
+  return fecha;
+}
+
+function formatearFechaLarga(fecha: Date): string {
+  return fecha.toLocaleDateString("es-PE", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function buscarDependencia(
+  codigo: string,
+): DependenciaCatalogoItem | undefined {
+  return CATALOGO_DEPENDENCIAS.find((d) => d.codigo === codigo);
+}
+
+export function AdminDerivacionPanel(): ReactElement {
+  const { sesion } = useAuth();
+  const {
+    solicitudes,
+    cargandoListado,
+    enviandoDerivacion,
+    errorListado,
+    errorDerivacion,
+    ultimaDerivada,
+    derivar,
+    limpiarUltima,
+  } = useDerivacion();
+
+  const [idSolicitud, setIdSolicitud] = useState<string>(SIN_SELECCION);
+  const [codigoDependencia, setCodigoDependencia] =
+    useState<string>(SIN_SELECCION);
+  const [tipoPersona, setTipoPersona] = useState<TipoPersona>(
+    TipoPersona.NATURAL,
+  );
+  const [numeroDocumento, setNumeroDocumento] = useState<string>("");
+  const [observaciones, setObservaciones] = useState<string>("");
+  const [sugerencia, setSugerencia] =
+    useState<SugerenciaDependenciaResponse | null>(null);
+  const [cargandoSugerencia, setCargandoSugerencia] = useState(false);
+
+  const dependenciaSeleccionada = useMemo(
+    () => buscarDependencia(codigoDependencia),
+    [codigoDependencia],
+  );
+
+  const solicitudSeleccionada = useMemo(
+    () => solicitudes.find((s) => String(s.id) === idSolicitud),
+    [solicitudes, idSolicitud],
+  );
+
+  const fechaMaximaPreview = useMemo(() => {
+    if (!dependenciaSeleccionada) return null;
+    return calcularFechaMaxima(dependenciaSeleccionada.plazo_dias_habiles);
+  }, [dependenciaSeleccionada]);
+
+  useEffect(() => {
+    if (errorListado) {
+      toaster.create({
+        type: "error",
+        title: "No se pudieron cargar las solicitudes",
+        description: errorListado.message,
+      });
+    }
+  }, [errorListado]);
+
+  useEffect(() => {
+    if (errorDerivacion) {
+      toaster.create({
+        type: "error",
+        title: "Fallo el registro de la derivacion",
+        description: errorDerivacion.message,
+      });
+    }
+  }, [errorDerivacion]);
+
+  useEffect(() => {
+    if (!ultimaDerivada) return;
+    toaster.create({
+      type: "success",
+      title: "Derivacion registrada",
+      description: `Solicitud #${ultimaDerivada.id} ingresada en ${ultimaDerivada.dependencia ?? ""}.`,
+    });
+    setIdSolicitud(SIN_SELECCION);
+    setCodigoDependencia(SIN_SELECCION);
+    setTipoPersona(TipoPersona.NATURAL);
+    setNumeroDocumento("");
+    setObservaciones("");
+    setSugerencia(null);
+    limpiarUltima();
+  }, [ultimaDerivada, limpiarUltima]);
+
+  // La sugerencia queda obsoleta si cambia la solicitud o el tipo de persona.
+  useEffect(() => {
+    setSugerencia(null);
+  }, [idSolicitud, tipoPersona]);
+
+  const handleSugerirDependencia = async (): Promise<void> => {
+    if (!sesion) return;
+    if (!solicitudSeleccionada) {
+      toaster.create({
+        type: "warning",
+        title: "Datos invalidos",
+        description: "Selecciona una solicitud entrante para sugerir dependencia.",
+      });
+      return;
+    }
+    setCargandoSugerencia(true);
+    try {
+      const resultado = await sugerirDependencia(
+        {
+          tipo_persona: tipoPersona,
+          detalle_solicitud: solicitudSeleccionada.descripcion,
+        },
+        sesion.token,
+      );
+      setSugerencia(resultado);
+    } catch (err) {
+      const error =
+        err instanceof ApiError
+          ? err
+          : new ApiError(0, "Error inesperado al pedir la sugerencia.");
+      toaster.create({
+        type: "error",
+        title: "No se pudo obtener la sugerencia",
+        description: error.message,
+      });
+    } finally {
+      setCargandoSugerencia(false);
+    }
+  };
+
+  const usarSugerencia = (): void => {
+    if (!sugerencia) return;
+    setCodigoDependencia(sugerencia.dependencia);
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    const id = Number.parseInt(idSolicitud, 10);
+    if (!Number.isInteger(id) || id < 1) {
+      toaster.create({
+        type: "warning",
+        title: "Datos invalidos",
+        description: "Selecciona una solicitud entrante.",
+      });
+      return;
+    }
+    if (!dependenciaSeleccionada) {
+      toaster.create({
+        type: "warning",
+        title: "Datos invalidos",
+        description: "Selecciona una dependencia destino.",
+      });
+      return;
+    }
+    const catalogoTipoPersona = CATALOGO_TIPO_PERSONA.find(
+      (t) => t.codigo === tipoPersona,
+    );
+    if (
+      !catalogoTipoPersona ||
+      !catalogoTipoPersona.documentoPattern.test(numeroDocumento)
+    ) {
+      toaster.create({
+        type: "warning",
+        title: "Datos invalidos",
+        description: `Ingresa un ${catalogoTipoPersona?.documentoLabel ?? "documento"} valido (${catalogoTipoPersona?.documentoLongitud ?? "?"} dígitos).`,
+      });
+      return;
+    }
+    void derivar(id, {
+      dependencia: dependenciaSeleccionada.codigo as Dependencia,
+      tipo_persona: tipoPersona,
+      numero_documento: numeroDocumento,
+      observaciones: observaciones.trim(),
+    });
+  };
+
+  const sinSolicitudes = !cargandoListado && solicitudes.length === 0;
+
+  return (
+    <Card.Root bg="gray.800" borderColor="gray.700" p={5}>
+      <Stack gap={4}>
+        <HStack justify="space-between" align="center">
+          <Heading size="md">Derivacion de Solicitudes (HU04)</Heading>
+          <Badge colorPalette="yellow" variant="solid">
+            Estado destino: Pendiente
+          </Badge>
+        </HStack>
+
+        <TipoPersonaSelector
+          value={tipoPersona}
+          onChange={(nuevoTipo) => {
+            setTipoPersona(nuevoTipo);
+            setNumeroDocumento("");
+          }}
+          numeroDocumento={numeroDocumento}
+          onNumeroDocumentoChange={setNumeroDocumento}
+        />
+
+        <form onSubmit={handleSubmit} noValidate>
+          <Stack gap={4}>
+            <Box>
+              <Text mb={2}>Solicitud Entrante</Text>
+              <NativeSelect.Root size="md" disabled={cargandoListado}>
+                <NativeSelect.Field
+                  value={idSolicitud}
+                  onChange={(e) => setIdSolicitud(e.currentTarget.value)}
+                >
+                  <option value={SIN_SELECCION}>
+                    {cargandoListado
+                      ? "Cargando solicitudes..."
+                      : sinSolicitudes
+                        ? "No hay solicitudes registradas"
+                        : "Selecciona una solicitud"}
+                  </option>
+                  {solicitudes.map((s: Solicitud) => (
+                    <option key={s.id} value={String(s.id)}>
+                      #{s.id} - {s.asunto} (DNI {s.dni_solicitante})
+                    </option>
+                  ))}
+                </NativeSelect.Field>
+                <NativeSelect.Indicator />
+              </NativeSelect.Root>
+            </Box>
+
+            <Box bg="gray.900" borderWidth="1px" borderColor="gray.700" p={4} rounded="md">
+              <HStack justify="space-between" align="center" mb={sugerencia ? 2 : 0}>
+                <Text fontSize="sm" color="gray.400">
+                  Sugerencia de dependencia (MDP-10)
+                </Text>
+                <Button
+                  type="button"
+                  size="xs"
+                  variant="outline"
+                  loading={cargandoSugerencia}
+                  loadingText="Calculando..."
+                  disabled={!solicitudSeleccionada}
+                  onClick={() => void handleSugerirDependencia()}
+                >
+                  Sugerir dependencia
+                </Button>
+              </HStack>
+              {sugerencia && (
+                <HStack justify="space-between" align="center">
+                  <Text fontSize="sm">
+                    {CATALOGO_DEPENDENCIAS.find(
+                      (d) => d.codigo === sugerencia.dependencia,
+                    )?.etiqueta ?? sugerencia.dependencia}{" "}
+                    — puntaje {sugerencia.puntaje.toFixed(2)}
+                  </Text>
+                  <Button
+                    type="button"
+                    size="xs"
+                    colorPalette="green"
+                    variant="subtle"
+                    onClick={usarSugerencia}
+                  >
+                    Usar esta sugerencia
+                  </Button>
+                </HStack>
+              )}
+            </Box>
+
+            <Box>
+              <Text mb={2}>Dependencia Destino</Text>
+              <NativeSelect.Root size="md">
+                <NativeSelect.Field
+                  value={codigoDependencia}
+                  onChange={(e) => setCodigoDependencia(e.currentTarget.value)}
+                >
+                  <option value={SIN_SELECCION}>Selecciona una dependencia</option>
+                  {CATALOGO_DEPENDENCIAS.map((d) => (
+                    <option key={d.codigo} value={d.codigo}>
+                      {d.etiqueta} ({d.plazo_dias_habiles} dias habiles)
+                    </option>
+                  ))}
+                </NativeSelect.Field>
+                <NativeSelect.Indicator />
+              </NativeSelect.Root>
+            </Box>
+
+            <Box bg="gray.900" borderWidth="1px" borderColor="gray.700" p={4} rounded="md">
+              <Text fontSize="sm" color="gray.400" mb={1}>
+                Fecha Maxima de Respuesta (preview)
+              </Text>
+              <Text fontWeight="semibold">
+                {fechaMaximaPreview
+                  ? formatearFechaLarga(fechaMaximaPreview)
+                  : "Selecciona una dependencia para calcular el plazo"}
+              </Text>
+              {dependenciaSeleccionada && (
+                <Text fontSize="xs" color="gray.500" mt={1}>
+                  Plazo de {dependenciaSeleccionada.plazo_dias_habiles} dias habiles
+                  desde hoy.
+                </Text>
+              )}
+            </Box>
+
+            <Box>
+              <Text mb={2}>Observaciones (opcional)</Text>
+              <Textarea
+                placeholder="Indicaciones para la dependencia destino"
+                value={observaciones}
+                onChange={(e) => setObservaciones(e.target.value)}
+                maxLength={500}
+                rows={3}
+              />
+            </Box>
+
+            <Button
+              type="submit"
+              colorPalette="blue"
+              loading={enviandoDerivacion}
+              loadingText="Registrando derivacion"
+              disabled={cargandoListado || sinSolicitudes}
+            >
+              Derivar Solicitud
+            </Button>
+          </Stack>
+        </form>
+      </Stack>
+    </Card.Root>
+  );
+}
